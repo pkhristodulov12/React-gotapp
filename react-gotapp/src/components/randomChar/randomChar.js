@@ -2,16 +2,19 @@ import React, {Component} from 'react';
 import './randomChar.css';
 import gotService from '../sevices/gotService';
 import Spinner from '../spinner';
-import ErrorMessage from '../errorMessage';
+import ErrorMessage from '../error';
 
 export default class RandomChar extends Component {
 
     gotService = new gotService();
 
-    state = {
-        char: {},
-        loading: true,
-        error: false
+    componentDidMount() {
+        this.updateChar();
+        // this.timerId = setInterval(this.updateChar, 1500);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timerId);
     }
 
     onCharLoaded = (char) => {
@@ -28,17 +31,7 @@ export default class RandomChar extends Component {
         })
     }
 
-    componentDidMount() {
-        this.updateChar();
-        this.timerId = setInterval(this.updateChar, 1500);
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.timerId);
-    }
-
     updateChar = () => {
-        console.log('update');
         const id = Math.floor(Math.random()*140 + 25);
         // const id = 130000;
         this.gotService.getCharacter(id)
@@ -46,10 +39,14 @@ export default class RandomChar extends Component {
             .catch(this.onError);
     }
 
-    render() {
-        console.log('constructor');
-        const { char, loading, error } = this.state;
+    state = {
+        char: {},
+        loading: true,
+        error: false
+    }
 
+    render() {
+        const {char, loading, error} = this.state;
         const errorMessage = error ? <ErrorMessage/> : null;
         const spinner = loading ? <Spinner/> : null;
         const content = !(loading || error) ? <View char={char}/> : null;
