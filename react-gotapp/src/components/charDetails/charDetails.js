@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import './charDetails.css';
-import gotService from '../sevices/gotService';
+import gotService from '../../services/gotService';
 import ErrorMessage from '../error';
 import Spinner from '../spinner';
+
+
 export default class CharDetails extends Component {
 
     gotService = new gotService();
@@ -41,8 +43,8 @@ export default class CharDetails extends Component {
         })
 
         this.gotService.getCharacter(charId)
-        .then(this.onCharDetailsLoaded )
-        .catch( () => this.onError())
+            .then(this.onCharDetailsLoaded )
+            .catch( () => this.onError())
     }
 
     onError() {
